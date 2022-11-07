@@ -37,7 +37,8 @@ const UsuarioSchema = Schema({
 })
 
 UsuarioSchema.methods.toJSON = function() { //ESTO SIRVE PARA QUE CUANDO HAGAMOS LA PETICION POST EN POSTMAN NO MUESTRE LA CONTRASEÑA NI EL __v
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 

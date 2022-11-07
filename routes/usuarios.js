@@ -5,6 +5,8 @@ const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const Role = require('../models/role');
 const { esRoleValido, emailExiste, emailUsuarioPorId } = require('../helpers/db-validators');
+const { validarJWT } = require('../middlewares/validar-jwt');
+const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
 
 const router = Router();
 
@@ -28,6 +30,9 @@ router.post('/', [ //El array o segundo argumento es para ir metiendo los middle
 ], usuariosPost);
 
 router.delete('/:id', [
+    validarJWT,
+    esAdminRole,
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE','OTRO_ROLE'),
     check('id', 'No es un id valido').isMongoId(),
     check('id').custom(emailUsuarioPorId),
     validarCampos
